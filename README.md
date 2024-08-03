@@ -19,9 +19,10 @@ Create `docker-compose.yml` symlink:
 ln -s docker-compose.local.yml docker-compose.yml
 ```
 
-Add `.env` variable `SITE_HOST` value to `/etc/hosts`
+Add `.env` variables `SITE_HOST` and `BUILD_SITE_HOST` values to `/etc/hosts`
 ```text
-127.0.1.1	bpi-front.docker
+127.0.1.1   bpi-front.docker         # dev server
+127.0.1.1   build.bpi-front.docker   # product build 
 ```
 
 Build application:
@@ -29,9 +30,18 @@ Build application:
 make build
 ```
 
-Start application:
+Start dev server application:
 ```bash
-make start
+make start-dev
 ```
 
 After start, application is available at http://bpi-front.docker/
+
+Start product build application:
+```bash
+make start-build
+```
+
+After start, application is available at http://build.bpi-front.docker/
+
+

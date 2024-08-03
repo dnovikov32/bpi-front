@@ -3,4 +3,7 @@
 set -eo pipefail
 
 npm install
-npm run dev
+
+echo ${NPM_RUN_COMMAND}
+
+${NPM_RUN_COMMAND}

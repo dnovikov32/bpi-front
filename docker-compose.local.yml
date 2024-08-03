@@ -9,6 +9,8 @@ services:
     container_name: bpi-front-node
     image: bpi-front-node
     entrypoint: /entrypoint.sh
+    environment:
+      - NPM_RUN_COMMAND=${NPM_RUN_COMMAND}
     build:
       context: ./
       dockerfile: ./.docker/node/dockerfile
@@ -29,6 +31,7 @@ services:
       dockerfile: ./.docker/nginx/dockerfile
       args:
         - SITE_HOST
+        - BUILD_SITE_HOST
     volumes:
       - "${HOME}/.cache:/home/docker/.cache"
       - "${HOME}/.composer:/home/docker/.composer"
@@ -43,5 +46,5 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=bpi-traefik
-      - traefik.http.routers.${APP_NAME}.rule=Host(`${SITE_HOST}`)
+      - traefik.http.routers.${APP_NAME}.rule=Host(`${SITE_HOST}`, `${BUILD_SITE_HOST}`)
       - traefik.http.routers.${APP_NAME}.entrypoints=http
