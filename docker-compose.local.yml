@@ -1,0 +1,28 @@
+version: '3.9'
+
+networks:
+  bpi-traefik:
+    external: true
+
+services:
+  nginx:
+    container_name: bpi-front-nginx
+    build:
+      context: ./
+      dockerfile: ./.docker/nginx/dockerfile
+      args:
+        - SITE_HOST
+    volumes:
+      - "${HOME}/.cache:/home/docker/.cache"
+      - "${HOME}/.composer:/home/docker/.composer"
+      - "${HOME}/.npm:/home/docker/.npm"
+      - ./.:/app
+    expose:
+      - 80
+    networks:
+      - bpi-traefik
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=bpi-traefik
+      - traefik.http.routers.${APP_NAME}.rule=Host(`${SITE_HOST}`)
+      - traefik.http.routers.${APP_NAME}.entrypoints=http
