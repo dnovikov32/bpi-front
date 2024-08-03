@@ -5,6 +5,23 @@ networks:
     external: true
 
 services:
+  node:
+    container_name: bpi-front-node
+    image: bpi-front-node
+    entrypoint: /entrypoint.sh
+    build:
+      context: ./
+      dockerfile: ./.docker/node/dockerfile
+    expose:
+      - 3000
+    volumes:
+      - "${HOME}/.cache:/home/docker/.cache"
+      - "${HOME}/.npm:/home/docker/.npm"
+      - ./.docker/node/entrypoint.sh:/entrypoint.sh
+      - ./.:/app
+    networks:
+      - bpi-traefik
+
   nginx:
     container_name: bpi-front-nginx
     build:
@@ -19,6 +36,8 @@ services:
       - ./.:/app
     expose:
       - 80
+    depends_on:
+      - node
     networks:
       - bpi-traefik
     labels:
